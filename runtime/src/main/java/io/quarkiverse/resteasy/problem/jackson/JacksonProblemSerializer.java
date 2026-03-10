@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import io.quarkiverse.resteasy.problem.HttpProblem;
-import io.quarkiverse.resteasy.problem.InstanceUtils;
 
 /**
  * Low level Jackson serializer for HttpProblem type.
@@ -39,7 +38,7 @@ public final class JacksonProblemSerializer extends StdSerializer<HttpProblem> {
             json.writeStringField("detail", problem.getDetail());
         }
         if (problem.getInstance() != null) {
-            json.writeStringField("instance", InstanceUtils.instanceToPath(problem.getInstance()));
+            json.writeStringField("instance", problem.getInstance().toASCIIString());
         }
 
         for (Map.Entry<String, Object> entry : problem.getParameters().entrySet()) {

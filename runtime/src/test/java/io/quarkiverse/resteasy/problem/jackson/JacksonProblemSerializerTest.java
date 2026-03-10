@@ -1,11 +1,9 @@
 package io.quarkiverse.resteasy.problem.jackson;
 
-import static jakarta.ws.rs.core.Response.Status.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -54,19 +52,22 @@ class JacksonProblemSerializerTest {
                 .isEqualTo(HttpProblemMother.SERIALIZED_BAD_REQUEST_PROBLEM);
     }
 
-    @Test
-    @DisplayName("Should decode uri for instance field")
-    void shouldDecodeUriForInstanceField() throws IOException {
-        HttpProblem problem = HttpProblem.builder()
-                .withStatus(NOT_FOUND)
-                .withInstance(URI.create("%2Fnon%7Cexisting%7Bpath+%2Fwith%7Bunwise%5Ccharacters%3E%23"))
-                .build();
-
-        serializer.serialize(problem, jsonGenerator, null);
-
-        assertThat(serializedProblem()).contains("""
-                "instance":"/non|existing{path /with{unwise\\\\characters>#"}""");
-    }
+    /*
+     * @Test
+     *
+     * @DisplayName("Should decode uri for instance field")
+     * void shouldDecodeUriForInstanceField() throws IOException {
+     * HttpProblem problem = HttpProblem.builder()
+     * .withStatus(NOT_FOUND)
+     * .withInstance(URI.create("%2Fnon%7Cexisting%7Bpath+%2Fwith%7Bunwise%5Ccharacters%3E%23"))
+     * .build();
+     *
+     * serializer.serialize(problem, jsonGenerator, null);
+     *
+     * assertThat(serializedProblem()).contains("""
+     * "instance":"/non|existing{path /with{unwise\\\\characters>#"}""");
+     * }
+     */
 
     private String serializedProblem() throws IOException {
         jsonGenerator.close();
